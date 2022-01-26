@@ -14,22 +14,73 @@
       <v-card outlined>
         <v-data-table
           :headers="headers"
-          :items="[]"
+          :items="categories.data"
+          :options.sync="options"
+          :server-items-length="total"
           class="mt-12"
-        ></v-data-table>
+        >
+          <template v-slot:item.actions="{ item }">
+            <div class="d-flex justify-end align-center">
+              <router-link
+                class="text-decoration-none font-weight-bold"
+                :to="{ name: 'categories.edit', params: { id: item.id } }"
+              >
+                Edit
+              </router-link>
+
+              <div
+                class="ml-2 font-weight-bold red--text pointer-cursor"
+                color="error"
+              >
+                Delete
+              </div>
+            </div>
+          </template>
+        </v-data-table>
       </v-card>
     </v-container>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   data: () => ({
+    options: {},
     headers: [
       { text: 'Name', value: 'name' },
-      { text: 'Description', value: 'description' },
-      { text: 'Actions', value: 'actions', sortable: false },
+      { text: '', value: 'actions', sortable: false, align: 'right' },
     ],
   }),
+
+  computed: {
+    ...mapGetters('category', ['categories']),
+
+    total() {
+      if (!this.categories) {
+        return 0;
+      }
+
+      return this.categories?.meta?.total;
+    },
+  },
+
+  methods: {
+    ...mapActions('category', ['getCategories']),
+  },
+
+  watch: {
+    options: {
+      handler() {
+        const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+        console.log(sortBy[0] ?? '', sortDesc[0] ?? '', page, itemsPerPage);
+
+        this.getCategories();
+      },
+      deep: true,
+    },
+  },
 };
 </script>

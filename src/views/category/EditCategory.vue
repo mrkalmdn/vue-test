@@ -2,7 +2,7 @@
   <div>
     <v-toolbar flat color="transparent">
       <v-container>
-        <h1>Create Category</h1>
+        <h1 v-if="category && category.data">Edit {{ category.data.name }}</h1>
       </v-container>
     </v-toolbar>
 
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 export default {
@@ -53,22 +53,36 @@ export default {
     ValidationProvider,
   },
 
-  data: () => ({
-    form: {
-      name: '',
-    },
-  }),
+  data() {
+    return {
+      form: {
+        id: '',
+        name: '',
+      },
+    };
+  },
+
+  computed: {
+    ...mapGetters('category', ['category']),
+  },
 
   methods: {
-    ...mapActions('category', ['addCategory']),
+    ...mapActions('category', ['updateCategory', 'getCategory']),
 
     async save() {
       try {
-        await this.addCategory(this.form);
+        await this.updateCategory(this.form);
       } catch (error) {
         this.$refs.form.setErrors(error.response.data.errors);
       }
     },
+  },
+
+  async mounted() {
+    await this.getCategory(this.$route.params.id);
+
+    this.form.id = this.category.data.id;
+    this.form.name = this.category.data.name;
   },
 };
 </script>
