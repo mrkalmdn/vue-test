@@ -19,7 +19,7 @@
           :server-items-length="total"
           class="mt-12"
         >
-          <template v-slot:item.actions="{ item }">
+          <template v-slot:[`item.actions`]="{ item }">
             <div class="d-flex justify-end align-center">
               <router-link
                 class="text-decoration-none font-weight-bold"
@@ -28,12 +28,7 @@
                 Edit
               </router-link>
 
-              <div
-                class="ml-2 font-weight-bold red--text pointer-cursor"
-                color="error"
-              >
-                Delete
-              </div>
+              <Confirmation :item="item" :delete="deleteCategory" />
             </div>
           </template>
         </v-data-table>
@@ -44,8 +39,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import Confirmation from '@/components/shared/Confirmation';
 
 export default {
+  components: {
+    Confirmation,
+  },
+
   data: () => ({
     options: {},
     headers: [
@@ -67,17 +67,26 @@ export default {
   },
 
   methods: {
-    ...mapActions('category', ['getCategories']),
+    ...mapActions('category', ['getCategories', 'deleteCategory']),
+
+    async fetch() {
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+      console.log(sortBy[0] ?? '', sortDesc[0] ?? '', page, itemsPerPage);
+
+      const params = new URLSearchParams({
+        page: page,
+        per_page: itemsPerPage,
+      });
+
+      this.getCategories(params);
+    },
   },
 
   watch: {
     options: {
       handler() {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-
-        console.log(sortBy[0] ?? '', sortDesc[0] ?? '', page, itemsPerPage);
-
-        this.getCategories();
+        this.fetch();
       },
       deep: true,
     },

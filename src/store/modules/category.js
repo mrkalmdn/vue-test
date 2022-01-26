@@ -21,15 +21,15 @@ const mutations = {
       Object.assign(state.category.data, category);
     }
   },
-  DELETE_CATEGORY: (state, category) => {
-    const index = state.categories.data.findIndex((a) => a.id === category.id);
+  DELETE_CATEGORY: (state, id) => {
+    const index = state.categories.data.findIndex((a) => a.id === id);
     state.categories.data.splice(index, 1);
   },
 };
 
 const actions = {
-  async getCategories({ commit }) {
-    const { data } = await api.get('/api/categories');
+  async getCategories({ commit }, payload) {
+    const { data } = await api.get('/api/categories?' + payload);
 
     commit('SET_CATEGORIES', data);
   },

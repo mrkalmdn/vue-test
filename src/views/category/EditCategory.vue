@@ -72,6 +72,8 @@ export default {
     async save() {
       try {
         await this.updateCategory(this.form);
+
+        this.$router.push('/categories');
       } catch (error) {
         this.$refs.form.setErrors(error.response.data.errors);
       }
