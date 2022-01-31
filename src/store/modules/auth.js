@@ -9,7 +9,7 @@ const state = {
 
 const mutations = {
   SET_USER: (state, user) => (state.user = user),
-  SET_TOKEN: (state, token) => Cookies.set('token', token),
+  SET_TOKEN: (state, token) => (state.token = token),
   SET_AUTHENTICATED: (state, authenticated) =>
     (state.authenticated = authenticated),
 };
@@ -21,6 +21,8 @@ const actions = {
     commit('SET_USER', data.user);
     commit('SET_TOKEN', data.token);
     commit('SET_AUTHENTICATED', true);
+    Cookies.set('token', data.token);
+    Cookies.set('user', JSON.stringify(data.user));
   },
 
   async me({ commit }) {

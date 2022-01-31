@@ -24,7 +24,7 @@
           <v-row>
             <v-col>
               <v-btn block depressed color="error" @click="onClick">
-                Delete
+                Delete {{ name }}
               </v-btn>
             </v-col>
 
@@ -41,6 +41,11 @@
 <script>
 export default {
   props: {
+    name: {
+      type: String,
+      required: true,
+    },
+
     item: {
       type: Object,
       required: true,

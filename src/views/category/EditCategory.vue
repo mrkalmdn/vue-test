@@ -26,17 +26,39 @@
                 </v-col>
               </validation-observer>
             </v-card>
+
+            <div class="mt-3">
+              <v-btn color="primary" depressed @click="save">Save</v-btn>
+
+              <v-btn
+                text
+                class="ml-2 black--text"
+                @click="$router.push('/categories')"
+              >
+                Cancel
+              </v-btn>
+            </div>
+          </v-col>
+
+          <v-col cols="12" lg="4">
+            <v-card outlined>
+              <v-card-text>
+                <b>Created at</b>
+                <p v-if="category && category.data">
+                  {{ dateFromNow(category.data.created_at) }}
+                </p>
+
+                <b>Last modified at</b>
+                <p v-if="category && category.data">
+                  {{ dateFromNow(category.data.updated_at) }}
+                </p>
+              </v-card-text>
+            </v-card>
           </v-col>
         </v-row>
 
         <v-row>
-          <v-col cols="12">
-            <v-btn color="primary" depressed @click="save">Save</v-btn>
-
-            <v-btn outlined class="ml-2" :to="{ name: 'categories' }">
-              Cancel
-            </v-btn>
-          </v-col>
+          <v-col cols="12"></v-col>
         </v-row>
       </div>
     </v-container>
@@ -46,6 +68,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 export default {
   components: {
@@ -77,6 +101,12 @@ export default {
       } catch (error) {
         this.$refs.form.setErrors(error.response.data.errors);
       }
+    },
+
+    dateFromNow(date) {
+      dayjs.extend(relativeTime);
+
+      return dayjs(date).fromNow();
     },
   },
 

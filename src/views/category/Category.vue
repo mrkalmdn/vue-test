@@ -28,7 +28,11 @@
                 Edit
               </router-link>
 
-              <Confirmation :item="item" :delete="deleteCategory" />
+              <Confirmation
+                :item="item"
+                :name="item.name"
+                :delete="deleteCategory"
+              />
             </div>
           </template>
         </v-data-table>

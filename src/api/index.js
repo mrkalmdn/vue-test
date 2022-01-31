@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import Cookie from 'js-cookie';
+import store from '@/store';
 
 const api = Axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -9,8 +9,17 @@ const api = Axios.create({
   withCredentials: true,
 });
 
-if (Cookie.get('token')) {
-  api.defaults.headers.common.Authorization = `Bearer ${Cookie.get('token')}`;
-}
+api.interceptors.request.use(
+  function (config) {
+    const accessToken = store.state.auth.token;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
 
 export default api;
