@@ -56,7 +56,6 @@
                         block
                         dark
                         color="primary"
-                        @click.prevent="passes(onSubmit)"
                         type="submit"
                         :loading="loading"
                       >
@@ -110,6 +109,7 @@ export default {
 
         this.$router.push('/dashboard');
       } catch (error) {
+        console.log(error);
         this.$refs.observer.setErrors(error.response.data.errors);
       } finally {
         this.loading = false;

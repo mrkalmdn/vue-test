@@ -19,6 +19,15 @@
             <v-list-item-title>Categories</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
+        <v-list-item router to="/brands">
+          <v-list-item-icon>
+            <v-icon size="medium">dashboard</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Brands</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
       <template v-slot:append>
         <v-divider></v-divider>

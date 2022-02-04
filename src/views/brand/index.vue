@@ -1,34 +1,35 @@
 <template>
   <div>
     <v-toolbar flat color="transparent">
-      <h1>Categories</h1>
+      <h1>Brands</h1>
 
       <v-spacer />
 
-      <v-btn color="primary" depressed :to="{ name: 'categories.create' }">
-        New Category
-      </v-btn>
+      <Form />
     </v-toolbar>
 
     <v-container>
       <v-card outlined>
         <v-data-table
           :headers="headers"
-          :items="categories.data"
+          :items="brands.data"
           :options.sync="options"
           :server-items-length="total"
           class="mt-12"
         >
+          <template v-slot:[`item.created_at`]="{ item }">
+            {{ dateFromNow(item.created_at) }}
+          </template>
+
+          <template v-slot:[`item.updated_at`]="{ item }">
+            {{ dateFromNow(item.updated_at) }}
+          </template>
+
           <template v-slot:[`item.actions`]="{ item }">
             <div class="d-flex justify-end align-center">
-              <router-link
-                class="text-decoration-none font-weight-bold"
-                :to="{ name: 'categories.edit', params: { id: item.id } }"
-              >
-                Edit
-              </router-link>
+              <Form :brand="item" />
 
-              <Delete :item="item" :name="item.name" :delete="deleteCategory" />
+              <Delete :item="item" :name="item.name" :delete="deleteBrand" />
             </div>
           </template>
         </v-data-table>
@@ -38,11 +39,15 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import Form from '@/components/brand/Form';
 import Delete from '@/components/shared/Delete';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 export default {
   components: {
+    Form,
     Delete,
   },
 
@@ -50,24 +55,26 @@ export default {
     options: {},
     headers: [
       { text: 'Name', value: 'name' },
+      { text: 'Created at', value: 'created_at' },
+      { text: 'Updated at', value: 'updated_at' },
       { text: '', value: 'actions', sortable: false, align: 'right' },
     ],
   }),
 
   computed: {
-    ...mapGetters('category', ['categories']),
+    ...mapGetters('brand', ['brands']),
 
     total() {
-      if (!this.categories) {
+      if (!this.brands) {
         return 0;
       }
 
-      return this.categories?.meta?.total;
+      return this.brands?.meta?.total;
     },
   },
 
   methods: {
-    ...mapActions('category', ['getCategories', 'deleteCategory']),
+    ...mapActions('brand', ['getBrands', 'deleteBrand']),
 
     async fetch() {
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
@@ -79,7 +86,13 @@ export default {
         per_page: itemsPerPage,
       });
 
-      this.getCategories(params);
+      this.getBrands(params);
+    },
+
+    dateFromNow(date) {
+      dayjs.extend(relativeTime);
+
+      return dayjs(date).fromNow();
     },
   },
 

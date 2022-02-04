@@ -11,7 +11,7 @@
     <v-dialog v-model="dialog" width="400">
       <v-card class="mx-auto">
         <v-container>
-          <h2 class="text-center">Delete</h2>
+          <h2 class="text-center">Delete {{ name }}</h2>
 
           <p class="text-center mt-3">
             Are you sure you would like to do this?
@@ -24,7 +24,7 @@
           <v-row>
             <v-col>
               <v-btn block depressed color="error" @click="onClick">
-                Delete {{ name }}
+                Delete
               </v-btn>
             </v-col>
 
@@ -70,8 +70,8 @@ export default {
       this.dialog = false;
     },
 
-    onClick() {
-      this.delete(this.item.id);
+    async onClick() {
+      await this.delete(this.item.id);
       this.close();
     },
   },
