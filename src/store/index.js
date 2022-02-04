@@ -4,6 +4,7 @@ import { auth } from './modules/auth';
 import { category } from './modules/category';
 import { brand } from './modules/brand';
 import { uom } from './modules/uom';
+import { product } from './modules/product';
 
 Vue.use(Vuex);
 
@@ -13,5 +14,6 @@ export default new Vuex.Store({
     category,
     brand,
     uom,
+    product,
   },
 });

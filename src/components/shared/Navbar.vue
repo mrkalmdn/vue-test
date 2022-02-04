@@ -11,9 +11,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-divider></v-divider>
-
-        <v-subheader>MASTER FILES</v-subheader>
+        <v-subheader class="pt-5 pb-3">MASTER FILES</v-subheader>
 
         <v-list-item router to="/categories">
           <v-list-item-icon>
@@ -39,6 +37,15 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>UOM</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item router to="/products">
+          <v-list-item-icon>
+            <v-icon size="medium">dashboard</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Products</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
