@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar flat color="transparent">
-      <h1>Brands</h1>
+      <h1>Unit of Measurements</h1>
 
       <v-spacer />
 
@@ -12,7 +12,7 @@
       <v-card outlined>
         <v-data-table
           :headers="headers"
-          :items="brands.data"
+          :items="uoms.data"
           :options.sync="options"
           :server-items-length="total"
           class="mt-12"
@@ -27,9 +27,9 @@
 
           <template v-slot:[`item.actions`]="{ item }">
             <div class="d-flex justify-end align-center">
-              <Form :brand="item" />
+              <Form :uom="item" />
 
-              <Delete :item="item" :name="item.name" :delete="deleteBrand" />
+              <Delete :item="item" :name="item.long_name" :delete="deleteUOM" />
             </div>
           </template>
         </v-data-table>
@@ -40,7 +40,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import Form from '@/components/brand/Form';
+import Form from '@/components/uom/Form';
 import Delete from '@/components/shared/Delete';
 import Helper from '@/mixins/helper';
 
@@ -55,7 +55,8 @@ export default {
   data: () => ({
     options: {},
     headers: [
-      { text: 'Name', value: 'name' },
+      { text: 'Short name', value: 'short_name' },
+      { text: 'Long name', value: 'long_name' },
       { text: 'Created at', value: 'created_at' },
       { text: 'Updated at', value: 'updated_at' },
       { text: '', value: 'actions', sortable: false, align: 'right' },
@@ -63,19 +64,19 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('brand', ['brands']),
+    ...mapGetters('uom', ['uoms']),
 
     total() {
-      if (!this.brands) {
+      if (!this.uoms) {
         return 0;
       }
 
-      return this.brands?.meta?.total;
+      return this.uoms?.meta?.total;
     },
   },
 
   methods: {
-    ...mapActions('brand', ['getBrands', 'deleteBrand']),
+    ...mapActions('uom', ['getUOMs', 'deleteUOM']),
 
     async fetch() {
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
@@ -87,7 +88,7 @@ export default {
         per_page: itemsPerPage,
       });
 
-      this.getBrands(params);
+      this.getUOMs(params);
     },
   },
 

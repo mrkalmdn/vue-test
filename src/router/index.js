@@ -60,6 +60,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "brands" */ '../views/brand/index.vue'),
   },
+  {
+    path: '/unit-of-measurements',
+    name: 'uom',
+    component: () =>
+      import(/* webpackChunkName: "uom" */ '../views/uom/index.vue'),
+  },
 ];
 
 const router = new VueRouter({
