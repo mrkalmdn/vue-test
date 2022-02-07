@@ -6,6 +6,7 @@ import { brand } from './modules/brand';
 import { uom } from './modules/uom';
 import { product } from './modules/product';
 import { supplier } from './modules/supplier';
+import { user } from './modules/user';
 
 Vue.use(Vuex);
 
@@ -17,5 +18,6 @@ export default new Vuex.Store({
     uom,
     product,
     supplier,
+    user,
   },
 });

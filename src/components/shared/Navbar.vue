@@ -95,6 +95,15 @@
             <v-list-item-title>Sales</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
+        <v-list-item router to="/inventory">
+          <v-list-item-icon>
+            <v-icon size="medium">maps_home_work</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Inventory</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
 
       <template v-slot:append>
