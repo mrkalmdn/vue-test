@@ -13,39 +13,86 @@
 
         <v-subheader class="pt-5 pb-3">MASTER FILES</v-subheader>
 
-        <v-list-item router to="/categories">
-          <v-list-item-icon>
-            <v-icon size="medium">dashboard</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Categories</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
         <v-list-item router to="/brands">
           <v-list-item-icon>
-            <v-icon size="medium">dashboard</v-icon>
+            <v-icon size="medium">shopping_bag</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Brands</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item router to="/uom">
+        <v-list-item router to="/categories">
           <v-list-item-icon>
-            <v-icon size="medium">dashboard</v-icon>
+            <v-icon size="medium">category</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Categories</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item router to="/products">
+          <v-list-item-icon>
+            <v-icon size="medium">inventory_2</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Products</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item router to="/suppliers">
+          <v-list-item-icon>
+            <v-icon size="medium">local_shipping</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Suppliers</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item router to="/unit-of-measurements">
+          <v-list-item-icon>
+            <v-icon size="medium">straighten</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>UOM</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item router to="/products">
+        <v-list-item router to="/users">
           <v-list-item-icon>
-            <v-icon size="medium">dashboard</v-icon>
+            <v-icon size="medium">account_circle</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Products</v-list-item-title>
+            <v-list-item-title>Users</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-subheader class="pt-5 pb-3">TRANSACTIONS</v-subheader>
+
+        <v-list-item router to="/orders">
+          <v-list-item-icon>
+            <v-icon size="medium">add_shopping_cart</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Orders</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item router to="/returns">
+          <v-list-item-icon>
+            <v-icon size="medium">remove_shopping_cart</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Returns</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item router to="/sales">
+          <v-list-item-icon>
+            <v-icon size="medium">trending_up</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Sales</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

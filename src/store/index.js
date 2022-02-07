@@ -5,6 +5,7 @@ import { category } from './modules/category';
 import { brand } from './modules/brand';
 import { uom } from './modules/uom';
 import { product } from './modules/product';
+import { supplier } from './modules/supplier';
 
 Vue.use(Vuex);
 
@@ -15,5 +16,6 @@ export default new Vuex.Store({
     brand,
     uom,
     product,
+    supplier,
   },
 });
