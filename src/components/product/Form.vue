@@ -17,7 +17,7 @@
       Edit
     </div>
 
-    <v-dialog v-model="dialog" width="500" persistent>
+    <v-dialog v-model="dialog" width="800" persistent>
       <v-card>
         <v-toolbar dense flat>
           <v-toolbar-title v-if="isEmptyObject(product)">
@@ -30,7 +30,7 @@
           <v-form @submit.prevent="onSubmit">
             <v-container>
               <v-row>
-                <v-col cols="12">
+                <v-col cols="6">
                   <validation-provider v-slot="{ errors }" name="name">
                     <v-text-field
                       dense
@@ -43,7 +43,50 @@
                   </validation-provider>
                 </v-col>
 
-                <v-col cols="12">
+                <v-col cols="6">
+                  <validation-provider v-slot="{ errors }" name="brand">
+                    <v-autocomplete
+                      dense
+                      outlined
+                      label="Brand"
+                      item-value="id"
+                      item-text="brand"
+                      :items="categories.data"
+                      hide-details="auto"
+                      :error-messages="errors"
+                      :search-input.sync="searchCategory"
+                      v-model="form.brand"
+                    />
+                  </validation-provider>
+                </v-col>
+
+                <v-col cols="6">
+                  <validation-provider v-slot="{ errors }" name="color">
+                    <v-text-field
+                      dense
+                      outlined
+                      label="Color"
+                      hide-details="auto"
+                      :error-messages="errors"
+                      v-model="form.color"
+                    />
+                  </validation-provider>
+                </v-col>
+
+                <v-col cols="6">
+                  <validation-provider v-slot="{ errors }" name="size">
+                    <v-text-field
+                      dense
+                      outlined
+                      label="Size"
+                      hide-details="auto"
+                      :error-messages="errors"
+                      v-model="form.size"
+                    />
+                  </validation-provider>
+                </v-col>
+
+                <v-col cols="6">
                   <validation-provider v-slot="{ errors }" name="category_id">
                     <v-autocomplete
                       dense
@@ -56,6 +99,91 @@
                       :error-messages="errors"
                       :search-input.sync="searchCategory"
                       v-model="form.category_id"
+                    />
+                  </validation-provider>
+                </v-col>
+                <v-col cols="6">
+                  <validation-provider v-slot="{ errors }" name="uom_id">
+                    <v-autocomplete
+                      dense
+                      outlined
+                      label="Unit of Measure"
+                      item-value="id"
+                      item-text="name"
+                      :items="categories.data"
+                      hide-details="auto"
+                      :error-messages="errors"
+                      :search-input.sync="searchCategory"
+                      v-model="form.uom_id"
+                    />
+                  </validation-provider>
+                </v-col>
+
+                <v-col cols="12">
+                  <validation-provider v-slot="{ errors }" name="price">
+                    <v-text-field
+                      type="number"
+                      dense
+                      outlined
+                      label="Selling Price"
+                      hide-details="auto"
+                      :error-messages="errors"
+                      v-model="form.price"
+                    />
+                  </validation-provider>
+                </v-col>
+              </v-row>
+            </v-container>
+
+            <v-divider></v-divider>
+
+            <v-toolbar dense flat>
+              <v-toolbar-title>Discount Price</v-toolbar-title>
+            </v-toolbar>
+
+            <v-container>
+              <v-row>
+                <v-col cols="4">
+                  <validation-provider v-slot="{ errors }" name="discount">
+                    <v-text-field
+                      dense
+                      outlined
+                      label="Discount"
+                      hide-details="auto"
+                      :error-messages="errors"
+                      v-model="form.discount"
+                    />
+                  </validation-provider>
+                </v-col>
+
+                <v-col cols="4">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="specialdiscount"
+                  >
+                    <v-text-field
+                      dense
+                      outlined
+                      label="Special Discount"
+                      hide-details="auto"
+                      :error-messages="errors"
+                      v-model="form.specialdiscount"
+                    />
+                  </validation-provider>
+                </v-col>
+
+                <v-col cols="4">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="specialdiscount2"
+                  >
+                    <v-text-field
+                      dense
+                      outlined
+                      label="Super Mega Special Discount"
+                      hide-details="auto"
+                      :error-messages="errors"
+                      v-model="form.specialdiscount2"
                     />
                   </validation-provider>
                 </v-col>
