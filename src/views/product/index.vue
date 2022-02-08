@@ -88,6 +88,7 @@ export default {
       const params = new URLSearchParams({
         page: page,
         per_page: itemsPerPage,
+        include: ['category', 'brand', 'uom'],
       });
 
       this.getProducts(params);

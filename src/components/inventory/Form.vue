@@ -21,73 +21,60 @@
           <v-toolbar-title>Input Items</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark text @click="transationComplete">Save</v-btn>
+            <v-btn dark text @click="onSubmit">Save</v-btn>
           </v-toolbar-items>
         </v-toolbar>
 
         <v-container>
           <v-row>
             <v-col cols="12" lg="6" md="6">
-              <v-form ref="form" v-model="valid">
+              <v-form ref="form">
                 <v-row class="mb-2">
                   <!-- Employee Name -->
                   <v-col cols="6">
                     <v-autocomplete
-                      auto-select-first
                       clearable
-                      label="Employee Checker*"
-                      :items="allProducts"
-                      :rules="nameRules"
+                      label="Employee *"
+                      :items="users.data"
                       item-value="id"
-                      item-text="uniquename"
-                      v-model="form.product"
-                      @change="fillForm(form.product)"
-                      return-object
-                      validate-on-blur
+                      item-text="full_name"
+                      v-model="form.user_id"
+                      :search-input.sync="searchUser"
                     />
                   </v-col>
                   <!-- Company Name Delivery -->
                   <v-col cols="6">
                     <v-autocomplete
-                      auto-select-first
                       clearable
                       label="Company Name*"
-                      :items="allProducts"
-                      :rules="nameRules"
+                      :items="suppliers.data"
                       item-value="id"
-                      item-text="uniquename"
-                      v-model="form.product"
-                      @change="fillForm(form.product)"
-                      return-object
-                      validate-on-blur
+                      item-text="name"
+                      v-model="form.supplier_id"
+                      :search-input.sync="searchSupplier"
                     />
                   </v-col>
                   <!-- ** Search Product Database ** -->
                   <v-col cols="12">
                     <v-autocomplete
-                      auto-select-first
                       clearable
                       label="Product*"
-                      :items="allProducts"
-                      :rules="nameRules"
+                      :items="products.data"
                       item-value="id"
-                      item-text="uniquename"
+                      item-text="name"
                       v-model="form.product"
-                      @change="fillForm(form.product)"
+                      :search-input.sync="searchProduct"
                       return-object
-                      validate-on-blur
                     />
                   </v-col>
                   <!-- ** Get Product UOM ** -->
                   <v-col cols="6">
                     <v-text-field
-                      v-model="form.uom"
+                      :value="uom"
                       label="Unit of Measure*"
                       readonly
                       disabled
                       required
-                      :rules="nameRules"
-                      validate-on-blur
                     />
                   </v-col>
                   <v-col cols="6" lg="6" md="6">
@@ -96,10 +83,17 @@
                       label="Quantity*"
                       type="number"
                       required
-                      :rules="nameRules"
-                      validate-on-blur
                     />
                   </v-col>
+
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="form.dr_number"
+                      label="DR Number"
+                      required
+                    />
+                  </v-col>
+
                   <small>*indicates required field</small>
                   <v-spacer></v-spacer>
                   <v-btn color="blue darken-1" text @click="close()">
@@ -121,14 +115,16 @@
                       <th class="text-left">Product Name</th>
                       <th class="text-left">Unit</th>
                       <th class="text-left">Quantity</th>
+                      <th class="text-left">Price</th>
                       <th class="text-left">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(item, index) in transactions" :key="index">
+                    <tr v-for="(item, index) in form.items" :key="index">
                       <td>{{ item.product_name }}</td>
                       <td>{{ item.uom }}</td>
                       <td>{{ item.quantity }}</td>
+                      <td>{{ item.price }}</td>
                       <td>
                         <v-btn
                           color="red mb-2 mt-1 white--text"
@@ -151,7 +147,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import Helper from '@/mixins/helper';
 
 export default {
@@ -168,16 +164,35 @@ export default {
     return {
       dialog: false,
       loading: false,
+      searchUser: null,
+      searchProduct: null,
+      searchSupplier: null,
       form: {
-        customer_name: '',
-        status: '',
-        // status of transaction "1" pending for confirmation
-        // status "       "      "2" complete
+        dr_number: '',
+        user_id: '',
+        product: {},
+        supplier_id: '',
+        quantity: '',
+        items: [],
       },
     };
   },
 
+  computed: {
+    ...mapGetters('user', ['users']),
+    ...mapGetters('product', ['products']),
+    ...mapGetters('supplier', ['suppliers']),
+    uom() {
+      return this.form.product && this.form.product.uom
+        ? this.form.product.uom.long_name
+        : '';
+    },
+  },
+
   methods: {
+    ...mapActions('user', ['getUsers']),
+    ...mapActions('product', ['getProducts']),
+    ...mapActions('supplier', ['getSuppliers']),
     ...mapActions('order', ['addOrder', 'updateOrder']),
 
     open() {
@@ -188,8 +203,26 @@ export default {
       this.dialog = false;
 
       this.form = {
-        customer_name: '',
+        dr_number: '',
+        user_id: '',
+        product: {},
+        supplier_id: '',
+        quantity: '',
+        items: [],
       };
+    },
+
+    addItem() {
+      this.form.items.push({
+        product_id: this.form.product.id,
+        product_name: this.form.product.name,
+        uom: this.form.product?.uom?.long_name,
+        quantity: this.form.quantity,
+        price: this.form.product.selling_price,
+      });
+
+      this.form.product = {};
+      this.form.quantity = '';
     },
 
     async onSubmit() {
@@ -203,10 +236,38 @@ export default {
 
         this.close();
       } catch (error) {
+        console.log(error);
         this.$refs.form.setErrors(error.response.data.errors);
       } finally {
         this.loading = false;
       }
+    },
+  },
+
+  watch: {
+    searchUser() {
+      const params = new URLSearchParams({
+        'filter[full_name]': this.searchUser,
+      });
+
+      this.getUsers(params);
+    },
+
+    searchProduct() {
+      const params = new URLSearchParams({
+        'filter[name]': this.searchProduct,
+        include: 'uom',
+      });
+
+      this.getProducts(params);
+    },
+
+    searchSupplier() {
+      const params = new URLSearchParams({
+        'filter[name]': this.searchSupplier,
+      });
+
+      this.getSuppliers(params);
     },
   },
 };

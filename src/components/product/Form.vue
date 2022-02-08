@@ -44,18 +44,18 @@
                 </v-col>
 
                 <v-col cols="6">
-                  <validation-provider v-slot="{ errors }" name="brand">
+                  <validation-provider v-slot="{ errors }" name="brand_id">
                     <v-autocomplete
                       dense
                       outlined
                       label="Brand"
                       item-value="id"
-                      item-text="brand"
-                      :items="categories.data"
+                      item-text="name"
+                      :items="brands.data"
                       hide-details="auto"
                       :error-messages="errors"
-                      :search-input.sync="searchCategory"
-                      v-model="form.brand"
+                      :search-input.sync="searchBrand"
+                      v-model="form.brand_id"
                     />
                   </validation-provider>
                 </v-col>
@@ -103,18 +103,18 @@
                   </validation-provider>
                 </v-col>
                 <v-col cols="6">
-                  <validation-provider v-slot="{ errors }" name="uom_id">
+                  <validation-provider v-slot="{ errors }" name="u_o_m_id">
                     <v-autocomplete
                       dense
                       outlined
                       label="Unit of Measure"
                       item-value="id"
-                      item-text="name"
-                      :items="categories.data"
+                      item-text="long_name"
+                      :items="uoms.data"
                       hide-details="auto"
                       :error-messages="errors"
-                      :search-input.sync="searchCategory"
-                      v-model="form.uom_id"
+                      :search-input.sync="searchUOMs"
+                      v-model="form.u_o_m_id"
                     />
                   </validation-provider>
                 </v-col>
@@ -129,61 +129,6 @@
                       hide-details="auto"
                       :error-messages="errors"
                       v-model="form.price"
-                    />
-                  </validation-provider>
-                </v-col>
-              </v-row>
-            </v-container>
-
-            <v-divider></v-divider>
-
-            <v-toolbar dense flat>
-              <v-toolbar-title>Discount Price</v-toolbar-title>
-            </v-toolbar>
-
-            <v-container>
-              <v-row>
-                <v-col cols="4">
-                  <validation-provider v-slot="{ errors }" name="discount">
-                    <v-text-field
-                      dense
-                      outlined
-                      label="Discount"
-                      hide-details="auto"
-                      :error-messages="errors"
-                      v-model="form.discount"
-                    />
-                  </validation-provider>
-                </v-col>
-
-                <v-col cols="4">
-                  <validation-provider
-                    v-slot="{ errors }"
-                    name="specialdiscount"
-                  >
-                    <v-text-field
-                      dense
-                      outlined
-                      label="Special Discount"
-                      hide-details="auto"
-                      :error-messages="errors"
-                      v-model="form.specialdiscount"
-                    />
-                  </validation-provider>
-                </v-col>
-
-                <v-col cols="4">
-                  <validation-provider
-                    v-slot="{ errors }"
-                    name="specialdiscount2"
-                  >
-                    <v-text-field
-                      dense
-                      outlined
-                      label="Super Mega Special Discount"
-                      hide-details="auto"
-                      :error-messages="errors"
-                      v-model="form.specialdiscount2"
                     />
                   </validation-provider>
                 </v-col>
@@ -246,8 +191,13 @@ export default {
       dialog: false,
       loading: false,
       searchCategory: null,
+      searchBrand: null,
+      searchUOMs: null,
       form: {
         name: '',
+        brand_id: '',
+        category_id: '',
+        u_o_m_id: '',
       },
     };
   },
@@ -263,6 +213,8 @@ export default {
   methods: {
     ...mapActions('product', ['addProduct', 'updateProduct']),
     ...mapActions('category', ['getCategories']),
+    ...mapActions('brand', ['getBrands']),
+    ...mapActions('uom', ['getUOMs']),
 
     open() {
       this.dialog = true;
@@ -318,7 +270,27 @@ export default {
 
   watch: {
     searchCategory() {
-      this.getCategories();
+      const params = new URLSearchParams({
+        'filter[name]': this.searchCategory,
+      });
+
+      this.getCategories(params);
+    },
+
+    searchBrand() {
+      const params = new URLSearchParams({
+        'filter[name]': this.searchBrand,
+      });
+
+      this.getBrands(params);
+    },
+
+    searchUOMs() {
+      const params = new URLSearchParams({
+        'filter[name]': this.searchBrand,
+      });
+
+      this.getUOMs(params);
     },
   },
 };

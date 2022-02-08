@@ -1,7 +1,9 @@
 import api from '@/api';
 
 const state = {
-  orders: [],
+  orders: {
+    data: [],
+  },
   order: {},
 };
 
@@ -27,31 +29,31 @@ const mutations = {
 
 const actions = {
   async getOrders({ commit }, payload) {
-    const { data } = await api.get('/api/orders?' + payload);
+    const { data } = await api.get('/api/deliveries?' + payload);
 
     commit('SET_ORDERS', data);
   },
 
   async getOrder({ commit }, id) {
-    const { data } = await api.get(`/api/orders/${id}`);
+    const { data } = await api.get(`/api/deliveries/${id}`);
 
     commit('SET_ORDER', data);
   },
 
   async addOrder({ commit }, payload) {
-    const { data } = await api.post('/api/orders', payload);
+    const { data } = await api.post('/api/deliveries', payload);
 
     commit('ADD_ORDER', data.data);
   },
 
   async updateOrder({ commit }, payload) {
-    const { data } = await api.put(`/api/orders/${payload.id}`, payload);
+    const { data } = await api.put(`/api/deliveries/${payload.id}`, payload);
 
     commit('UPDATE_ORDER', data.data);
   },
 
   async deleteOrder({ commit }, id) {
-    await api.delete(`/api/orders/${id}`);
+    await api.delete(`/api/deliveries/${id}`);
 
     commit('DELETE_ORDER', id);
   },
