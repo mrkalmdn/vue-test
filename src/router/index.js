@@ -82,6 +82,26 @@ const routes = [
     name: 'users',
     component: () => import('../views/user/index.vue'),
   },
+  {
+    path: '/orders',
+    name: 'orders',
+    component: () => import('../views/order/index.vue'),
+  },
+  {
+    path: '/returns',
+    name: 'returns',
+    component: () => import('../views/return/index.vue'),
+  },
+  {
+    path: '/inventory',
+    name: 'inventory',
+    component: () => import('../views/inventory/index.vue'),
+  },
+  {
+    path: '/clients',
+    name: 'clients',
+    component: () => import('../views/client/index.vue'),
+  },
 ];
 
 const router = new VueRouter({

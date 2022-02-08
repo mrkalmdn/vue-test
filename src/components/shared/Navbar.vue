@@ -31,6 +31,15 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item router to="/clients">
+          <v-list-item-icon>
+            <v-icon size="medium">contact_page</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Clients</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-item router to="/products">
           <v-list-item-icon>
             <v-icon size="medium">inventory_2</v-icon>
@@ -71,7 +80,7 @@
 
         <v-list-item router to="/orders">
           <v-list-item-icon>
-            <v-icon size="medium">add_shopping_cart</v-icon>
+            <v-icon size="medium">shopping_cart</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Orders</v-list-item-title>
