@@ -14,39 +14,41 @@
 
     <v-dialog v-model="dialog" width="500" fullscreen persistent>
       <v-card>
-        <v-toolbar dark color="primary">
+        <v-toolbar tile flat dark color="primary">
           <v-btn icon dark @click="close()">
             <v-icon>mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>Input Items</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn dark text @click="onSubmit">Save</v-btn>
-          </v-toolbar-items>
+
+          <v-toolbar-title>Create Delivery</v-toolbar-title>
+
+          <v-spacer />
+
+          <v-btn dark text @click="onSubmit">Save</v-btn>
         </v-toolbar>
 
-        <v-container>
+        <v-container fluid>
           <v-row>
-            <v-col cols="12" lg="6" md="6">
+            <v-col cols="12" lg="6">
               <v-form ref="form">
-                <v-row class="mb-2">
-                  <!-- Employee Name -->
-                  <v-col cols="6">
-                    <v-autocomplete
-                      clearable
-                      label="Employee *"
-                      :items="users.data"
-                      item-value="id"
-                      item-text="full_name"
-                      v-model="form.user_id"
-                      :search-input.sync="searchUser"
+                <v-row>
+                  <v-col cols="12" lg="4">
+                    <v-text-field
+                      dense
+                      outlined
+                      hide-details="auto"
+                      v-model="form.dr_number"
+                      label="DR Number"
+                      required
                     />
                   </v-col>
-                  <!-- Company Name Delivery -->
-                  <v-col cols="6">
+
+                  <v-col cols="12" lg="4">
                     <v-autocomplete
+                      dense
+                      outlined
                       clearable
-                      label="Company Name*"
+                      label="Supplier"
+                      hide-details="auto"
                       :items="suppliers.data"
                       item-value="id"
                       item-text="name"
@@ -54,11 +56,29 @@
                       :search-input.sync="searchSupplier"
                     />
                   </v-col>
-                  <!-- ** Search Product Database ** -->
-                  <v-col cols="12">
+
+                  <v-col cols="12" lg="4">
                     <v-autocomplete
+                      dense
+                      outlined
                       clearable
-                      label="Product*"
+                      label="Received By"
+                      hide-details="auto"
+                      :items="users.data"
+                      item-value="id"
+                      item-text="full_name"
+                      v-model="form.user_id"
+                      :search-input.sync="searchUser"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" lg="12">
+                    <v-autocomplete
+                      dense
+                      outlined
+                      clearable
+                      placeholder="Search product..."
+                      hide-details="auto"
                       :items="products.data"
                       item-value="id"
                       item-text="name"
@@ -67,77 +87,85 @@
                       return-object
                     />
                   </v-col>
-                  <!-- ** Get Product UOM ** -->
-                  <v-col cols="6">
+
+                  <v-col cols="12" lg="4">
                     <v-text-field
-                      :value="uom"
-                      label="Unit of Measure*"
-                      readonly
-                      disabled
-                      required
+                      dense
+                      outlined
+                      type="number"
+                      label="Quantity"
+                      hide-details="auto"
+                      v-model.number="form.quantity"
                     />
                   </v-col>
-                  <v-col cols="6" lg="6" md="6">
+
+                  <v-col cols="12" lg="4">
                     <v-text-field
-                      v-model="form.quantity"
-                      label="Quantity*"
+                      dense
+                      outlined
                       type="number"
-                      required
+                      label="Price"
+                      hide-details="auto"
+                      v-model.number="form.price"
                     />
                   </v-col>
 
                   <v-col cols="12">
-                    <v-text-field
-                      v-model="form.dr_number"
-                      label="DR Number"
-                      required
-                    />
+                    <v-btn depressed color="primary" @click="addItem">
+                      Add Item
+                    </v-btn>
                   </v-col>
-
-                  <small>*indicates required field</small>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="close()">
-                    Close
-                  </v-btn>
-                  <v-btn color="blue darken-1" text @click="addItem()">
-                    Add
-                  </v-btn>
                 </v-row>
-                <v-divider></v-divider>
               </v-form>
-              <!-- DELIVERY IN -->
             </v-col>
-            <v-col cols="12" lg="6" md="6">
-              <v-simple-table>
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">Product Name</th>
-                      <th class="text-left">Unit</th>
-                      <th class="text-left">Quantity</th>
-                      <th class="text-left">Price</th>
-                      <th class="text-left">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(item, index) in form.items" :key="index">
-                      <td>{{ item.product_name }}</td>
-                      <td>{{ item.uom }}</td>
-                      <td>{{ item.quantity }}</td>
-                      <td>{{ item.price }}</td>
-                      <td>
-                        <v-btn
-                          color="red mb-2 mt-1 white--text"
-                          text
-                          @click="removeItem(index)"
-                        >
-                          <v-icon>mdi-clipboard-remove-outline</v-icon>
-                        </v-btn>
-                      </td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
+            <v-col cols="12" lg="6">
+              <div style="background-color: gray; height: 90.5vh" class="pa-2">
+                <v-row>
+                  <v-col cols="12" lg="4" offset="8">
+                    <v-card>
+                      <v-card-text class="text-right">
+                        <div>TOTAL</div>
+
+                        <p class="pt-3 text-h4 text--primary">
+                          {{ totalPrice }}
+                        </p>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
+
+                <v-simple-table class="mt-3">
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">Product Name</th>
+                        <th class="text-left">Unit</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-right">Price</th>
+                        <th class="text-right"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(item, index) in form.items" :key="index">
+                        <td>{{ item.product_name }}</td>
+                        <td>{{ item.uom }}</td>
+                        <td class="text-center">{{ item.quantity }}</td>
+                        <td class="text-right">{{ item.price }}</td>
+                        <td class="text-right">
+                          <v-btn
+                            color="red mb-2 mt-1 white--text"
+                            small
+                            icon
+                            @click="removeItem(index)"
+                          >
+                            <v-icon small>delete_outline</v-icon>
+                          </v-btn>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </div>
             </v-col>
           </v-row>
         </v-container>
@@ -149,6 +177,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import Helper from '@/mixins/helper';
+import { debounce } from 'lodash';
 
 export default {
   mixins: [Helper],
@@ -173,6 +202,7 @@ export default {
         product: {},
         supplier_id: '',
         quantity: '',
+        price: '',
         items: [],
       },
     };
@@ -182,10 +212,21 @@ export default {
     ...mapGetters('user', ['users']),
     ...mapGetters('product', ['products']),
     ...mapGetters('supplier', ['suppliers']),
+
     uom() {
       return this.form.product && this.form.product.uom
         ? this.form.product.uom.long_name
         : '';
+    },
+
+    totalPrice() {
+      if (this.form.items.length) {
+        return this.form.items.reduce((total, item) => {
+          return total + item.price * item.quantity;
+        }, 0);
+      }
+
+      return 0;
     },
   },
 
@@ -218,11 +259,16 @@ export default {
         product_name: this.form.product.name,
         uom: this.form.product?.uom?.long_name,
         quantity: this.form.quantity,
-        price: this.form.product.selling_price,
+        price: this.form.price,
       });
 
       this.form.product = {};
       this.form.quantity = '';
+      this.form.price = '';
+    },
+
+    removeItem(index) {
+      this.form.items.splice(index, 1);
     },
 
     async onSubmit() {
@@ -242,39 +288,51 @@ export default {
         this.loading = false;
       }
     },
-  },
 
-  watch: {
-    searchUser() {
+    fetchUser: debounce(async function () {
       const params = new URLSearchParams({
         'filter[full_name]': this.searchUser,
       });
 
-      this.getUsers(params);
-    },
+      await this.getUsers(params);
+    }, 350),
 
-    searchProduct() {
+    fetchProduct: debounce(async function () {
       const params = new URLSearchParams({
         'filter[name]': this.searchProduct,
         include: 'uom',
       });
 
-      this.getProducts(params);
-    },
+      await this.getProducts(params);
+    }, 350),
 
-    searchSupplier() {
+    fetchSupplier: debounce(async function () {
       const params = new URLSearchParams({
         'filter[name]': this.searchSupplier,
       });
 
-      this.getSuppliers(params);
+      await this.getSuppliers(params);
+    }, 350),
+  },
+
+  watch: {
+    searchUser() {
+      if (this.searchUser) {
+        this.fetchUser();
+      }
+    },
+
+    searchProduct() {
+      if (this.searchProduct) {
+        this.fetchProduct();
+      }
+    },
+
+    searchSupplier() {
+      if (this.searchSupplier) {
+        this.fetchSupplier();
+      }
     },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.pointer-cursor {
-  cursor: pointer;
-}
-</style>

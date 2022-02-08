@@ -12,7 +12,7 @@
       <v-card outlined>
         <v-data-table
           :headers="headers"
-          :items="inventories.data"
+          :items="orders.data"
           :options.sync="options"
           :server-items-length="total"
           class="mt-12"
@@ -29,11 +29,7 @@
             <div class="d-flex justify-end align-center">
               <Form :inventory="item" />
 
-              <Delete
-                :item="item"
-                :name="item.name"
-                :delete="deleteInventory"
-              />
+              <Delete :item="item" name="asd" :delete="deleteOrder" />
             </div>
           </template>
         </v-data-table>
@@ -70,19 +66,19 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('inventory', ['inventories']),
+    ...mapGetters('order', ['orders']),
 
     total() {
-      if (!this.inventories) {
+      if (!this.orders) {
         return 0;
       }
 
-      return this.inventories?.meta?.total;
+      return this.orders?.meta?.total;
     },
   },
 
   methods: {
-    ...mapActions('inventory', ['getInventories', 'deleteInventory']),
+    ...mapActions('order', ['getOrders', 'deleteOrder']),
 
     async fetch() {
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
@@ -94,7 +90,7 @@ export default {
         per_page: itemsPerPage,
       });
 
-      this.getInventories(params);
+      this.getOrders(params);
     },
   },
 
