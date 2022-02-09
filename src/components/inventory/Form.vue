@@ -107,7 +107,7 @@
                           hide-details="auto"
                           :items="products.data"
                           item-value="id"
-                          item-text="name"
+                          item-text="unique_name"
                           v-model="form.product"
                           :search-input.sync="searchProduct"
                           return-object
@@ -201,19 +201,35 @@
                       <tr v-for="(item, index) in form.items" :key="index">
                         <td>{{ item.product_name }}</td>
                         <td>{{ item.uom }}</td>
-                        <td class="text-center">{{ item.quantity }}</td>
-                        <td class="text-right">
-                          <v-icon
-                            v-if="
-                              errors &&
-                              errors.items &&
-                              errors.items[`${index}`].price
-                            "
-                            color="red"
+                        <td class="text-center">
+                          <v-tooltip
                             small
+                            v-if="hasError(index, 'quantity')"
+                            bottom
                           >
-                            error
-                          </v-icon>
+                            <template v-slot:activator="{ on }">
+                              <v-icon color="red" v-on="on">error</v-icon>
+                            </template>
+                            <span>
+                              {{ errors[`items.${index}.quantity`][0] }}
+                            </span>
+                          </v-tooltip>
+
+                          {{ item.quantity }}
+                        </td>
+                        <td class="text-right">
+                          <v-tooltip
+                            small
+                            v-if="hasError(index, 'price')"
+                            bottom
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-icon color="red" v-on="on">error</v-icon>
+                            </template>
+                            <span>
+                              {{ errors[`items.${index}.price`][0] }}
+                            </span>
+                          </v-tooltip>
 
                           {{ item.price }}
                         </td>
@@ -352,7 +368,7 @@ export default {
     addItem() {
       this.form.items.push({
         product_id: this.form.product.id,
-        product_name: this.form.product.name,
+        product_name: this.form.product.unique_name,
         uom: this.form.product?.uom?.long_name,
         quantity: this.form.quantity,
         price: this.form.price,
@@ -367,6 +383,14 @@ export default {
 
     removeItem(index) {
       this.form.items.splice(index, 1);
+    },
+
+    hasError(index, type) {
+      if (this.errors && this.errors[`items.${index}.${type}`]) {
+        return true;
+      }
+
+      return false;
     },
 
     async onSubmit() {
@@ -401,7 +425,7 @@ export default {
 
     fetchProduct: debounce(async function () {
       const params = new URLSearchParams({
-        'filter[name]': this.searchProduct,
+        'filter[unique_name]': this.searchProduct,
         include: 'uom',
       });
 
