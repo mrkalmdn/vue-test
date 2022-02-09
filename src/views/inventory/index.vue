@@ -27,7 +27,7 @@
 
           <template v-slot:[`item.actions`]="{ item }">
             <div class="d-flex justify-end align-center">
-              <Form :inventory="item" />
+              <Form :order="item" />
 
               <Delete :item="item" name="asd" :delete="deleteOrder" />
             </div>
@@ -55,12 +55,8 @@ export default {
   data: () => ({
     options: {},
     headers: [
-      { text: 'Transaction ID', value: 'name' },
-      { text: 'Product', value: 'name' },
-      { text: 'Price', value: 'name' },
-      { text: 'Quantity', value: 'name' },
-      { text: 'Total Amount', value: 'name' },
-      { text: 'Returned Date', value: 'created_at' },
+      { text: 'DR Number', value: 'dr_number' },
+      { text: 'Delivery Date', value: 'created_at' },
       { text: '', value: 'actions', sortable: false, align: 'right' },
     ],
   }),
