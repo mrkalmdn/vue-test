@@ -55,7 +55,7 @@ export default {
   data: () => ({
     options: {},
     headers: [
-      { text: 'Name', value: 'name' },
+      { text: 'Name', value: 'unique_name' },
       { text: 'Category', value: 'category.name' },
       { text: 'Brand', value: 'brand.name' },
       { text: 'UOM', value: 'uom.long_name' },

@@ -60,7 +60,20 @@
                   </validation-provider>
                 </v-col>
 
-                <v-col cols="6">
+                <v-col cols="4">
+                  <validation-provider v-slot="{ errors }" name="code">
+                    <v-text-field
+                      dense
+                      outlined
+                      label="Code"
+                      hide-details="auto"
+                      :error-messages="errors"
+                      v-model="form.code"
+                    />
+                  </validation-provider>
+                </v-col>
+
+                <v-col cols="4">
                   <validation-provider v-slot="{ errors }" name="color">
                     <v-text-field
                       dense
@@ -73,7 +86,7 @@
                   </validation-provider>
                 </v-col>
 
-                <v-col cols="6">
+                <v-col cols="4">
                   <validation-provider v-slot="{ errors }" name="size">
                     <v-text-field
                       dense
