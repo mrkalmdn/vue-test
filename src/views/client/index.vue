@@ -55,10 +55,10 @@ export default {
   data: () => ({
     options: {},
     headers: [
-      { text: 'Owner', value: 'name' },
-      { text: 'Company Name', value: 'name' },
-      { text: 'Address', value: 'name' },
-      { text: 'Contact', value: 'name' },
+      { text: 'Owner', value: 'client_name' },
+      { text: 'Company Name', value: 'business_name' },
+      { text: 'Address', value: 'address' },
+      { text: 'Contact', value: 'contact' },
       { text: 'Created at', value: 'created_at' },
       { text: 'Updated at', value: 'updated_at' },
       { text: '', value: 'actions', sortable: false, align: 'right' },

@@ -26,26 +26,26 @@
             <v-container>
               <v-row>
                 <v-col cols="12">
-                  <validation-provider v-slot="{ errors }" name="name">
+                  <validation-provider v-slot="{ errors }" name="client_name">
                     <v-text-field
                       dense
                       outlined
                       label="Client Name"
                       hide-details="auto"
                       :error-messages="errors"
-                      v-model="form.name"
+                      v-model="form.client_name"
                     />
                   </validation-provider>
                 </v-col>
                 <v-col cols="12">
-                  <validation-provider v-slot="{ errors }" name="company_name">
+                  <validation-provider v-slot="{ errors }" name="business_name">
                     <v-text-field
                       dense
                       outlined
                       label="Company Name"
                       hide-details="auto"
                       :error-messages="errors"
-                      v-model="form.company_name"
+                      v-model="form.business_name"
                     />
                   </validation-provider>
                 </v-col>
@@ -62,14 +62,14 @@
                   </validation-provider>
                 </v-col>
                 <v-col cols="12">
-                  <validation-provider v-slot="{ errors }" name="Contact">
+                  <validation-provider v-slot="{ errors }" name="contact">
                     <v-text-field
                       dense
                       outlined
                       label="Contact"
                       hide-details="auto"
                       :error-messages="errors"
-                      v-model="form.Contact"
+                      v-model="form.contact"
                     />
                   </validation-provider>
                 </v-col>
@@ -132,20 +132,26 @@ export default {
       dialog: false,
       loading: false,
       form: {
-        name: '',
+        client_name: '',
+        address: '',
+        contact: '',
+        business_name: '',
       },
     };
   },
 
   methods: {
-    ...mapActions('brand', ['addBrand', 'updateBrand']),
+    ...mapActions('client', ['addClient', 'updateClient']),
 
     open() {
       this.dialog = true;
 
       if (!this.isEmptyObject(this.client)) {
         this.form.id = this.client.id;
-        this.form.name = this.client.name;
+        this.form.client_name = this.client.client_name;
+        this.form.business_name = this.client.business_name;
+        this.form.contact = this.client.contact;
+        this.form.address = this.client.address;
       }
     },
 
@@ -153,7 +159,10 @@ export default {
       this.dialog = false;
 
       this.form = {
-        name: '',
+        client_name: '',
+        address: '',
+        contact: '',
+        business_name: '',
       };
     },
 

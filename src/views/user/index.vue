@@ -55,7 +55,7 @@ export default {
   data: () => ({
     options: {},
     headers: [
-      { text: 'Name', value: 'name' },
+      { text: 'Name', value: 'full_name' },
       { text: 'Created at', value: 'created_at' },
       { text: 'Updated at', value: 'updated_at' },
       { text: '', value: 'actions', sortable: false, align: 'right' },
