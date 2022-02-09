@@ -135,7 +135,11 @@
                     </v-col>
 
                     <v-col cols="12" lg="4">
-                      <validation-provider v-slot="{ errors }" name="price">
+                      <validation-provider
+                        rules="required|min:0.01"
+                        v-slot="{ errors }"
+                        name="price"
+                      >
                         <v-text-field
                           dense
                           outlined
