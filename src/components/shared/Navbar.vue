@@ -105,6 +105,17 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item router to="/deliveries">
+          <v-list-item-icon>
+            <v-icon size="medium">local_shipping</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Deliveries</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-subheader class="pt-5 pb-3">REPORTS</v-subheader>
+
         <v-list-item router to="/inventory">
           <v-list-item-icon>
             <v-icon size="medium">maps_home_work</v-icon>
