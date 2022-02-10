@@ -1,7 +1,9 @@
 import api from '@/api';
 
 const state = {
-  users: [],
+  users: {
+    data: [],
+  },
   user: {},
 };
 

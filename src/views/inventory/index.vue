@@ -84,6 +84,7 @@ export default {
       const params = new URLSearchParams({
         page: page,
         per_page: itemsPerPage,
+        include: ['transactions.product.uom', 'supplier', 'receiver'],
       });
 
       this.getOrders(params);

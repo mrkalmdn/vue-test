@@ -75,7 +75,7 @@
                       <validation-provider
                         rules="required"
                         v-slot="{ errors }"
-                        name="user_id"
+                        name="received_by"
                       >
                         <v-autocomplete
                           dense
@@ -86,7 +86,7 @@
                           :items="users.data"
                           item-value="id"
                           item-text="full_name"
-                          v-model="form.user_id"
+                          v-model="form.received_by"
                           :search-input.sync="searchUser"
                           :error-messages="errors"
                         />
@@ -311,10 +311,10 @@ export default {
       searchSupplier: null,
       errors: null,
       form: {
-        dr_number: '',
-        user_id: '',
+        dr_number: this.order.dr_number ?? '',
+        received_by: this.order?.receiver?.id ?? '',
         product: '',
-        supplier_id: '',
+        supplier_id: this.order?.supplier?.id ?? '',
         quantity: '',
         price: '',
         items: [],
@@ -352,6 +352,22 @@ export default {
 
     open() {
       this.dialog = true;
+
+      if (!this.isEmptyObject(this.order)) {
+        this.$store.commit('supplier/ADD_SUPPLIER', this.order.supplier);
+        this.$store.commit('user/ADD_USER', this.order.receiver);
+
+        this.form.items = this.order.items.map((item) => {
+          return {
+            id: item.id,
+            product_id: item.product.id,
+            product_name: item.product.unique_name,
+            uom: item.product?.uom?.long_name,
+            quantity: item.quantity,
+            price: item.price,
+          };
+        });
+      }
     },
 
     close() {
@@ -359,7 +375,7 @@ export default {
 
       this.form = {
         dr_number: '',
-        user_id: '',
+        received_by: '',
         product: {},
         supplier_id: '',
         quantity: '',
