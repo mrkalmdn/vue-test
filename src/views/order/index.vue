@@ -13,7 +13,7 @@
       <v-card outlined>
         <v-data-table
           :headers="headers"
-          :items="orders.data"
+          :items="transactions.data"
           :options.sync="options"
           :server-items-length="total"
           class="mt-12"
@@ -28,9 +28,9 @@
 
           <template v-slot:[`item.actions`]="{ item }">
             <div class="d-flex justify-end align-center">
-              <Form :order="item" />
+              <Form :transaction="item" />
 
-              <Delete :item="item" :name="item.name" :delete="deleteOrder" />
+              <Delete :item="item" name="asd" :delete="deleteTransaction" />
             </div>
           </template>
         </v-data-table>
@@ -43,13 +43,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import Form from '@/components/order/Form';
-import Delete from '@/components/shared/Delete';
+// import Delete from '@/components/shared/Delete';
 import Helper from '@/mixins/helper';
 
 export default {
   components: {
     Form,
-    Delete,
+    // Delete,
   },
 
   mixins: [Helper],
@@ -57,7 +57,7 @@ export default {
   data: () => ({
     options: {},
     headers: [
-      { text: 'TransactionID', value: 'transaction_id' },
+      { text: 'Invoice / DR Number', value: 'invoice' },
       //  TransactionID clickable
       { text: 'Created at', value: 'created_at' },
       { text: 'Updated at', value: 'updated_at' },
@@ -66,19 +66,19 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('order', ['orders']),
+    ...mapGetters('transaction', ['transactions']),
 
     total() {
-      if (!this.orders) {
+      if (!this.transactions) {
         return 0;
       }
 
-      return this.orders?.meta?.total;
+      return this.transactions?.meta?.total;
     },
   },
 
   methods: {
-    ...mapActions('order', ['getOrders', 'deleteOrder']),
+    ...mapActions('transaction', ['getTransactions', 'deleteTransaction']),
 
     async fetch() {
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
@@ -90,7 +90,7 @@ export default {
         per_page: itemsPerPage,
       });
 
-      this.getOrders(params);
+      this.getTransactions(params);
     },
   },
 

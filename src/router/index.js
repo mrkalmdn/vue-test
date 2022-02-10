@@ -93,9 +93,9 @@ const routes = [
     component: () => import('../views/return/index.vue'),
   },
   {
-    path: '/inventory',
-    name: 'inventory',
-    component: () => import('../views/inventory/index.vue'),
+    path: '/deliveries',
+    name: 'deliveries',
+    component: () => import('../views/delivery/index.vue'),
   },
   {
     path: '/clients',

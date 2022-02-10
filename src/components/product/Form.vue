@@ -133,7 +133,7 @@
                 </v-col>
 
                 <v-col cols="12">
-                  <validation-provider v-slot="{ errors }" name="price">
+                  <validation-provider v-slot="{ errors }" name="selling_price">
                     <v-text-field
                       type="number"
                       dense
@@ -141,7 +141,7 @@
                       label="Selling Price"
                       hide-details="auto"
                       :error-messages="errors"
-                      v-model="form.price"
+                      v-model="form.selling_price"
                     />
                   </validation-provider>
                 </v-col>
@@ -209,6 +209,7 @@ export default {
       form: {
         name: '',
         brand_id: '',
+        selling_price: '',
         category_id: '',
         u_o_m_id: '',
       },

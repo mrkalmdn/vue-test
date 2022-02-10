@@ -75,7 +75,7 @@
                       <validation-provider
                         rules="required"
                         v-slot="{ errors }"
-                        name="user_id"
+                        name="received_by"
                       >
                         <v-autocomplete
                           dense
@@ -86,7 +86,7 @@
                           :items="users.data"
                           item-value="id"
                           item-text="full_name"
-                          v-model="form.user_id"
+                          v-model="form.received_by"
                           :search-input.sync="searchUser"
                           :error-messages="errors"
                         />
@@ -312,7 +312,7 @@ export default {
       errors: null,
       form: {
         dr_number: '',
-        user_id: '',
+        received_by: '',
         product: '',
         supplier_id: '',
         quantity: '',
@@ -359,7 +359,7 @@ export default {
 
       this.form = {
         dr_number: '',
-        user_id: '',
+        received_by: '',
         product: {},
         supplier_id: '',
         quantity: '',
