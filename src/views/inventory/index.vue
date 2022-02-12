@@ -29,7 +29,11 @@
             <div class="d-flex justify-end align-center">
               <Form :order="item" />
 
-              <Delete :item="item" name="asd" :delete="deleteOrder" />
+              <Delete
+                :item="item"
+                :name="item.dr_number"
+                :delete="deleteOrder"
+              />
             </div>
           </template>
         </v-data-table>

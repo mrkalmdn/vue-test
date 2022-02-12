@@ -357,6 +357,7 @@ export default {
         this.$store.commit('supplier/ADD_SUPPLIER', this.order.supplier);
         this.$store.commit('user/ADD_USER', this.order.receiver);
 
+        this.form.id = this.order.id;
         this.form.items = this.order.items.map((item) => {
           return {
             id: item.id,
@@ -416,12 +417,33 @@ export default {
     async onSubmit() {
       this.loading = true;
       this.errors = null;
-      await this.save();
+
+      if (this.isEmptyObject(this.order)) {
+        await this.save(this.form);
+      } else {
+        await this.update(this.form);
+      }
     },
 
     async save() {
       try {
         await this.addOrder(this.form);
+
+        this.close();
+      } catch (error) {
+        const errors = error.response.data.errors;
+
+        this.errors = errors;
+
+        this.$refs.form.setErrors(errors);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async update() {
+      try {
+        await this.updateOrder(this.form);
 
         this.close();
       } catch (error) {
