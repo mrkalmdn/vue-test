@@ -348,7 +348,11 @@ export default {
     ...mapActions('user', ['getUsers']),
     ...mapActions('product', ['getProducts']),
     ...mapActions('supplier', ['getSuppliers']),
-    ...mapActions('order', ['addOrder', 'updateOrder']),
+    ...mapActions('order', [
+      'addOrder',
+      'updateOrder',
+      'deleteTransactionItem',
+    ]),
 
     open() {
       this.dialog = true;
@@ -402,8 +406,30 @@ export default {
       this.$refs.form.reset();
     },
 
-    removeItem(index) {
-      this.form.items.splice(index, 1);
+    async removeItem(index) {
+      if (confirm('Are you sure you want to delete this item?')) {
+        const selected = this.form.items[index];
+
+        if (selected.id) {
+          await this.deleteTransactionItem({
+            deliveryId: this.form.id,
+            transactionId: selected.id,
+          });
+
+          this.form.items = this.order.items.map((item) => {
+            return {
+              id: item.id,
+              product_id: item.product.id,
+              product_name: item.product.unique_name,
+              uom: item.product?.uom?.long_name,
+              quantity: item.quantity,
+              price: item.price,
+            };
+          });
+        } else {
+          this.form.items.splice(index, 1);
+        }
+      }
     },
 
     hasError(index, type) {

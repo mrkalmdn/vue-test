@@ -1,12 +1,23 @@
 <template>
   <div>
     <div
+      v-if="asText"
       class="ml-2 font-weight-bold red--text pointer-cursor"
       color="error"
       @click="open"
     >
       Delete
     </div>
+
+    <v-btn
+      v-else
+      color="red mb-2 mt-1 white--text"
+      small
+      icon
+      @click="removeItem(index)"
+    >
+      <v-icon small>delete_outline</v-icon>
+    </v-btn>
 
     <v-dialog v-model="dialog" width="400">
       <v-card class="mx-auto">
@@ -54,6 +65,11 @@ export default {
     delete: {
       type: Function,
       required: true,
+    },
+
+    asText: {
+      type: Boolean,
+      default: true,
     },
   },
 

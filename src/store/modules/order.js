@@ -25,6 +25,20 @@ const mutations = {
     const index = state.orders.data.findIndex((a) => a.id === id);
     state.orders.data.splice(index, 1);
   },
+
+  DELETE_TRANSACTION_ITEM: (state, payload) => {
+    const { deliveryId, transactionId } = payload;
+
+    const index = state.orders.data.findIndex((a) => a.id === deliveryId);
+
+    const selected = state.orders.data[index];
+
+    const transactionIndex = selected.items.findIndex(
+      (a) => a.id === transactionId
+    );
+
+    selected.items.splice(transactionIndex, 1);
+  },
 };
 
 const actions = {
@@ -56,6 +70,16 @@ const actions = {
     await api.delete(`/api/deliveries/${id}`);
 
     commit('DELETE_ORDER', id);
+  },
+
+  async deleteTransactionItem({ commit }, payload) {
+    const { deliveryId, transactionId } = payload;
+
+    await api.delete(
+      `api/deliveries/${deliveryId}/transactions/${transactionId}`
+    );
+
+    commit('DELETE_TRANSACTION_ITEM', payload);
   },
 };
 
