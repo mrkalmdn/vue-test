@@ -471,13 +471,10 @@ export default {
     async update() {
       try {
         await this.updateTransaction(this.form);
-
         this.close();
       } catch (error) {
         const errors = error.response.data.errors;
-
         this.errors = errors;
-
         this.$refs.form.setErrors(errors);
       } finally {
         this.loading = false;
@@ -492,7 +489,7 @@ export default {
             deliveryId: this.form.id,
             transactionId: selected.id,
           });
-          this.form.items = this.order.items.map((item) => {
+          this.form.items = this.transaction.items.map((item) => {
             return {
               id: item.id,
               product_id: item.product.id,
@@ -557,7 +554,12 @@ export default {
     async onSubmit() {
       this.loading = true;
       this.errors = null;
-      await this.save();
+
+      if (this.isEmptyObject(this.transaction)) {
+        await this.save(this.form);
+      } else {
+        await this.update(this.form);
+      }
     },
 
     async save() {
