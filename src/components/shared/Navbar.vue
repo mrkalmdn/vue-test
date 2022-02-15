@@ -160,36 +160,28 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-
 export default {
   data() {
     return {
       drawer: true,
     };
   },
-
   computed: {
     ...mapGetters('auth', ['user']),
   },
-
   methods: {
     ...mapActions('auth', ['logout']),
-
     photo() {
       if (!this.user) {
         return;
       }
-
       if (this.user.photo !== null) {
         return this.user.photo;
       }
-
       return `https://ui-avatars.com/api/?name=${this.user.first_name}+${this.user.last_name}`;
     },
-
     async signOut() {
       await this.logout();
-
       this.$router.push('/');
     },
   },

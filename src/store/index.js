@@ -11,6 +11,7 @@ import { order } from './modules/order';
 import { replace } from './modules/replace';
 import { inventory } from './modules/inventory';
 import { client } from './modules/client';
+import { transaction } from './modules/transaction'
 
 Vue.use(Vuex);
 
@@ -27,5 +28,6 @@ export default new Vuex.Store({
     replace,
     inventory,
     client,
+    transaction
   },
 });
