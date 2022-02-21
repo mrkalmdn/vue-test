@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar flat color="transparent">
-      <h1>Inventory</h1>
+      <h1>Deliveries</h1>
 
       <v-spacer />
 
@@ -15,8 +15,59 @@
           :items="orders.data"
           :options.sync="options"
           :server-items-length="total"
-          class="mt-12"
+          @toggle-select-all="selectAll"
+          v-model="selected"
+          :show-select="hasUnpublished"
         >
+          <template v-slot:top>
+            <v-toolbar flat>
+              <v-btn
+                v-if="selected.length > 0"
+                depressed
+                @click="publish"
+                :disabled="publishing"
+                :loading="publishing"
+              >
+                Publish
+              </v-btn>
+
+              <v-spacer />
+
+              <v-text-field
+                dense
+                outlined
+                placeholder="Search..."
+                hide-details
+              />
+            </v-toolbar>
+          </template>
+
+          <template v-slot:[`item.data-table-select`]="{ item }">
+            <v-checkbox
+              v-if="item.published_at === null"
+              multiple
+              v-model="selected"
+              :value="item"
+              color="grey darken-1"
+            />
+          </template>
+
+          <template v-slot:[`item.published_at`]="{ item }">
+            <v-btn
+              rounded
+              :class="{
+                'red lighten-5 red--text text-darken-4':
+                  item.published_at === null,
+                'green lighten-5 green--text text-darken-4':
+                  item.published_at !== null,
+              }"
+              depressed
+              x-small
+            >
+              {{ item.status }}
+            </v-btn>
+          </template>
+
           <template v-slot:[`item.created_at`]="{ item }">
             {{ dateFromNow(item.created_at) }}
           </template>
@@ -26,7 +77,10 @@
           </template>
 
           <template v-slot:[`item.actions`]="{ item }">
-            <div class="d-flex justify-end align-center">
+            <div
+              class="d-flex justify-end align-center"
+              v-if="item.published_at === null"
+            >
               <Form :order="item" />
 
               <Delete
@@ -57,9 +111,14 @@ export default {
   mixins: [Helper],
 
   data: () => ({
+    publishing: false,
+    selected: [],
     options: {},
     headers: [
+      { text: 'Status', value: 'published_at', width: '10%' },
       { text: 'DR Number', value: 'dr_number' },
+      { text: 'Supplier', value: 'supplier.name' },
+      { text: 'Receiver', value: 'receiver.full_name' },
       { text: 'Delivery Date', value: 'created_at' },
       { text: '', value: 'actions', sortable: false, align: 'right' },
     ],
@@ -75,10 +134,36 @@ export default {
 
       return this.orders?.meta?.total;
     },
+
+    hasUnpublished() {
+      return this.orders?.data?.some((order) => order.published_at === null);
+    },
   },
 
   methods: {
-    ...mapActions('order', ['getOrders', 'deleteOrder']),
+    ...mapActions('order', ['getOrders', 'deleteOrder', 'publishOrders']),
+
+    selectAll(e) {
+      this.selected = e?.items.filter((item) => item.published_at === null);
+    },
+
+    async publish() {
+      this.publishing = true;
+
+      try {
+        const payload = {
+          ids: this.selected.map((item) => item.id),
+        };
+
+        await this.publishOrders(payload);
+
+        this.selected = [];
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.publishing = false;
+      }
+    },
 
     async fetch() {
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;

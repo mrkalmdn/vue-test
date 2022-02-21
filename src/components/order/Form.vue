@@ -11,7 +11,7 @@
 
     <div
       v-else
-      class="text-decoration-none font-weight-bold pointer-cursor"
+      class="text-decoration-none font-weight-semibold pointer-cursor"
       @click="open"
     >
       Edit

@@ -25,7 +25,6 @@ const mutations = {
     const index = state.orders.data.findIndex((a) => a.id === id);
     state.orders.data.splice(index, 1);
   },
-
   DELETE_TRANSACTION_ITEM: (state, payload) => {
     const { deliveryId, transactionId } = payload;
 
@@ -38,6 +37,15 @@ const mutations = {
     );
 
     selected.items.splice(transactionIndex, 1);
+  },
+  PUBLISH_ORDERS: (state, orders) => {
+    state.orders.data.map((order) => {
+      const index = orders.findIndex((a) => a.id === order.id);
+
+      if (index !== -1) {
+        Object.assign(order, orders[index]);
+      }
+    });
   },
 };
 
@@ -80,6 +88,13 @@ const actions = {
     );
 
     commit('DELETE_TRANSACTION_ITEM', payload);
+  },
+
+  async publishOrders({ commit }, payload) {
+    const { data } = await api.put('/api/deliveries/publish', payload);
+    console.log(data);
+
+    commit('PUBLISH_ORDERS', data.data);
   },
 };
 
