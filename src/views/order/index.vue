@@ -18,6 +18,12 @@
           :server-items-length="total"
           class="mt-12"
         >
+          <template v-slot:item.invoice="{ item }">
+            <a href="#" @click="viewOrder(item.invoice)">
+              {{ item.invoice }}
+            </a>
+          </template>
+
           <template v-slot:[`item.created_at`]="{ item }">
             {{ dateFromNow(item.created_at) }}
           </template>
@@ -59,6 +65,7 @@ export default {
     options: {},
     headers: [
       { text: 'Invoice / DR Number', value: 'invoice' },
+      { text: 'Total Amount', value: 'total' },
       //  TransactionID clickable
       { text: 'Created at', value: 'created_at' },
       { text: 'Updated at', value: 'updated_at' },
@@ -76,6 +83,12 @@ export default {
   },
   methods: {
     ...mapActions('transaction', ['getTransactions', 'deleteTransaction']),
+
+    viewOrder(invoice) {
+      this.getDeliveryData(invoice);
+      this.dialog2 = true;
+      this.idHeader = invoice;
+    },
 
     async fetch() {
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;

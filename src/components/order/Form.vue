@@ -14,7 +14,7 @@
       class="text-decoration-none font-weight-semibold pointer-cursor"
       @click="open"
     >
-      Edit
+      <!-- Edit -->
     </div>
 
     <v-dialog v-model="dialog" width="500" fullscreen persistent>
