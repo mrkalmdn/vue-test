@@ -5,6 +5,7 @@ const state = {
     data: [],
   },
   transaction: {},
+  transactionData: [],
 };
 
 const mutations = {
@@ -43,6 +44,10 @@ const mutations = {
 
     selected.items.splice(transactionIndex, 1);
   },
+
+  //
+  VIEW_TRANSACTION: (state, data) => (state.transactionData = data),
+  //
 };
 
 const actions = {
@@ -83,11 +88,19 @@ const actions = {
 
     commit('DELETE_TRANSACTION_ITEM', payload);
   },
+
+  //
+  async getTransactionData({ commit }, id) {
+    const response = await api.get(`api/sales-view/${id}`);
+    commit('VIEW_TRANSACTION', response.data);
+  },
+  //
 };
 
 const getters = {
   transactions: (state) => state.transactions,
   transaction: (state) => state.transaction,
+  transactionData: (state) => state.transactionData,
 };
 
 export const transaction = {
