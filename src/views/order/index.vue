@@ -21,7 +21,7 @@
           <!-- <ViewForm /> -->
 
           <template v-slot:[`item.invoice`]="{ item }">
-            <a href="#" @click="viewOrder(item.invoice)">
+            <a href="#" @click="viewOrder(item)">
               {{ item.invoice }}
             </a>
           </template>
@@ -54,18 +54,23 @@
     <v-dialog v-model="dialog2" width="1200">
       <v-card>
         <v-card-title class="text-h5 teal lighten-2">
-          <span class="white--text">Delivery ID : {{ idHeader }}</span>
+          <span class="white--text">
+            Delivery ID : {{ selectedOrder.invoice }}
+          </span>
         </v-card-title>
 
         <v-card-text class="mt-5">
           <v-data-table
             dense
             :headers="headers2"
-            :items="transactionData"
+            :items="selectedOrder.items"
             item-key="name"
             class="elevation-1"
             hide-default-footer
           >
+            <template v-slot:item.total_price="{ item }">
+              {{ item.price * item.quantity }}
+            </template>
             <template v-slot:item.actions="{ item }">
               <v-btn class="success mb-2 mt-1 mr-2" @click="edit(item)">
                 <v-icon>mdi-clipboard-text-search-outline</v-icon>
@@ -84,7 +89,7 @@
 
         <v-card-actions>
           <span class="h2 font-weight-black text-decoration-underline">
-            Grand Total = P 5400
+            Grand Total = P {{ grandTotal }}
           </span>
           <v-spacer></v-spacer>
           <v-btn color="primary" text @click="dialog2 = false">Confirm</v-btn>
@@ -109,7 +114,7 @@ export default {
   },
   mixins: [Helper],
   data: () => ({
-    idHeader: '',
+    selectedOrder: {},
     dialog2: false,
     options: {},
     headers: [
@@ -125,7 +130,7 @@ export default {
         text: 'Product Name',
         align: 'start',
         sortable: false,
-        value: 'uniquename',
+        value: 'product.unique_name',
       },
       { text: 'Quantity', value: 'quantity' },
       { text: 'Price', value: 'price' },
@@ -141,6 +146,16 @@ export default {
       }
       return this.transactions?.meta?.total;
     },
+    grandTotal() {
+      if (!this.selectedOrder?.items) {
+        return 0;
+      }
+
+      return this.selectedOrder.items.reduce(
+        (acc, curr) => acc + curr.total * -1,
+        0
+      );
+    },
   },
   methods: {
     ...mapActions('transaction', [
@@ -150,17 +165,10 @@ export default {
       'getTransactionData',
     ]),
 
-    viewOrder(invoice) {
-      this.getTransactionData(invoice);
+    viewOrder(item) {
+      this.selectedOrder = item;
       this.dialog2 = true;
-      this.idHeader = invoice;
     },
-
-    // viewOrder(item) {
-    //   this.getTransactionData(item.id);
-    //   this.dialog2 = true;
-    //   this.idHeader = item.invoice;
-    // },
 
     async fetch() {
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
