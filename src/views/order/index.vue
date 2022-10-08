@@ -261,7 +261,7 @@
                   required
                   :disabled="editMode == false"
                   v-on:keydown.enter.prevent="save()"
-                  v-model="form.transaction_amount"
+                  v-model="form.total"
                 ></v-text-field>
 
                 <v-text-field
@@ -527,7 +527,6 @@ export default {
       total: '',
       price: '',
       unit_cost: '',
-      transaction_amount: 0,
       payment_method: '',
       items: [],
     },
@@ -571,6 +570,8 @@ export default {
       this.selectedOrder = item;
       this.dialog2 = true;
       this.form = this.selectedOrder;
+
+      this.form.change = this.form.amount - this.form.total;
     },
 
     edit(item) {
