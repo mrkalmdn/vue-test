@@ -133,7 +133,7 @@
                         required
                         disabled
                         v-on:keydown.enter.prevent="save()"
-                        v-model="form.product"
+                        v-model="form2.product"
                       ></v-text-field>
 
                       <v-row>
@@ -145,7 +145,7 @@
                             required
                             :disabled="editMode == false"
                             v-on:keydown.enter.prevent="save()"
-                            v-model="form.price"
+                            v-model="form2.price"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="3">
@@ -168,7 +168,7 @@
                         required
                         :disabled="editMode == false"
                         v-on:keydown.enter.prevent="save()"
-                        v-model="form.quantity"
+                        v-model="form2.quantity"
                       ></v-text-field>
 
                       <v-text-field
@@ -177,7 +177,7 @@
                         required
                         disabled
                         v-on:keydown.enter.prevent="save()"
-                        v-model="form.total_price"
+                        v-model="form2.total"
                       ></v-text-field>
                       <v-row>
                         <v-col cols="6">
@@ -242,7 +242,7 @@
                   label="Payment Type"
                   required
                   v-on:keydown.enter.prevent="save()"
-                  v-model="form.payment_type"
+                  v-model="form.payment_method"
                 ></v-text-field>
 
                 <v-text-field
@@ -251,7 +251,7 @@
                   label="Payment Amount"
                   required
                   v-on:keydown.enter.prevent="save()"
-                  v-model="form.payment_amount"
+                  v-model="form.amount"
                 ></v-text-field>
 
                 <v-text-field
@@ -527,13 +527,17 @@ export default {
       total: '',
       price: '',
       unit_cost: '',
+      transaction_amount: 0,
+      payment_method: '',
+      items: [],
     },
-    // form2: {
-    //   payment_type: '',
-    //   payment_amount: '',
-    //   transaction_amount: '',
-    //   change: '',
-    // },
+    form2: {
+      id: '',
+      price: '',
+      product: '',
+      quantity: '',
+      total: '',
+    },
   }),
   computed: {
     ...mapGetters('transaction', ['transactions', 'transactionData']),
@@ -563,25 +567,24 @@ export default {
     ]),
 
     viewOrder(item) {
+      console.log(item);
       this.selectedOrder = item;
       this.dialog2 = true;
-      this.form = {
-        payment_type: item.payment_type,
-        payment_amount: item.payment_amount,
-        transaction_amount: this.grandTotal,
-        change: item.payment_amount - this.grandTotal,
-      };
+      this.form = this.selectedOrder;
     },
 
     edit(item) {
-      console.log(item);
-      this.editMode = true;
-      this.form = {
-        product: item.product.unique_name,
-        quantity: item.quantity,
-        price: item.price,
-        total_price: item.total * -1,
-        unit_cost: item.unit_cost,
+      this.editMode = !this.editMode;
+
+      const index = this.form.items.findIndex((a) => a.id === item.id);
+      const selected = this.form.items[index];
+
+      this.form2 = {
+        id: selected.id,
+        price: selected.price,
+        quantity: selected.quantity,
+        total: selected.total,
+        product: selected.product.unique_name,
       };
     },
 
