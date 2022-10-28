@@ -1,0 +1,20 @@
+Orders -> index.vue
+    1. SRP missing in dialog box
+    2. v-if client null function
+        2.1 if client null display name as "CASH"
+        2.2 if client true display client details
+    3. Total Gross Income (sum all income column in table)
+    4. SAVE FUNCTION (if success display success snackbar)
+        4.1 if order is edited "page 1" update data
+        4.2 if order is edited "page 1" update payment data "page 2"
+        4.3 "page 3" should automatically update same data with "page 2"
+
+Products -> index.vue
+    1. Update Function not working properly
+
+Users -> index.vue
+    1. Logged in User should not be visible in the table
+    2. Admin Access Only
+
+Deliveries -> index.vue
+    1. Edit Function

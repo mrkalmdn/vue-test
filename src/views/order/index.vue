@@ -343,17 +343,63 @@
                       </template>
                       <template v-slot:item.income="{ item }">
                         <v-chip :color="getColor(item.income)" dark>
-                          <!-- {{ 25 }} -->
                           {{
                             item.price * item.quantity -
-                            item.unit_cost * item.quantity
+                            item.product.unit_cost * item.quantity
                           }}
                         </v-chip>
                       </template>
                     </v-data-table>
                   </v-col>
                   <v-col cols="6">
-                    <v-form ref="form" v-model="valid" lazy-validation>
+                    <!-- if client = null -->
+                    <v-text-field
+                      outlined
+                      label="Customer name"
+                      required
+                      disabled
+                      v-on:keydown.enter.prevent="save()"
+                      value="Cash"
+                    ></v-text-field>
+
+                    <v-row>
+                      <v-col cols="4">
+                        <v-text-field
+                          type="number"
+                          outlined
+                          label="Payment Amount"
+                          required
+                          :disabled="editMode == false"
+                          v-on:keydown.enter.prevent="save()"
+                          value="114000"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-text-field
+                          type="number"
+                          outlined
+                          label="Transaction Amount"
+                          required
+                          :disabled="editMode == false"
+                          v-on:keydown.enter.prevent="save()"
+                          value="113750"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-text-field
+                          type="number"
+                          outlined
+                          label="Change Amount"
+                          required
+                          :disabled="editMode == false"
+                          v-on:keydown.enter.prevent="save()"
+                          value="250"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <!-- if client = null -->
+                    <!-- else -->
+                    <!-- <v-form ref="form" v-model="valid" lazy-validation>
                       <v-text-field
                         outlined
                         label="Client name"
@@ -407,7 +453,8 @@
                         v-on:keydown.enter.prevent="save()"
                         value="0"
                       ></v-text-field>
-                    </v-form>
+                    </v-form> -->
+                    <!-- else -->
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -415,7 +462,7 @@
               <v-divider></v-divider>
               <v-card-actions>
                 <span class="h2 font-weight-black text-decoration-underline">
-                  Grand Total = P 4000
+                  Grand Total = P {{ grandTotal }}
                 </span>
                 <v-spacer></v-spacer>
                 <v-btn :disabled="editMode == true" @click="e1 = 2">
@@ -455,7 +502,6 @@
     >
       <v-icon color="success" class="mr-1">mdi-check-circle-outline</v-icon>
       {{ text }}
-
       <template v-slot:action="{ attrs }">
         <v-btn color="success" text v-bind="attrs" @click="snackbar = false">
           <v-icon>mdi-close-circle-outline</v-icon>
@@ -463,6 +509,31 @@
       </template>
     </v-snackbar>
     <!-- snackbar -->
+
+    <!-- cancel snackbar -->
+    <v-snackbar
+      v-model="snackbar2"
+      color="red darken-4"
+      outlined
+      top
+      right
+      elevation="3"
+      :timeout="timeout"
+    >
+      {{ text2 }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="red darken-4"
+          text
+          v-bind="attrs"
+          @click="snackbar2 = false"
+        >
+          <v-icon>mdi-close-circle-outline</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- cancel snackbar -->
   </div>
 </template>
 
@@ -481,7 +552,9 @@ export default {
   mixins: [Helper],
   data: () => ({
     snackbar: false,
+    snackbar2: false,
     text: `Transaction Complete !`,
+    text2: `Transaction Cancelled !`,
     timeout: 3000,
     e1: 1,
     valid: true,
@@ -596,7 +669,7 @@ export default {
     close() {
       this.dialog2 = false;
       this.e1 = 1;
-      this.snackbar = true;
+      this.snackbar2 = true;
     },
 
     getColor(income) {
