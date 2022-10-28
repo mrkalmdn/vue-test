@@ -10,7 +10,8 @@ Orders -> index.vue
         4.3 "page 3" should automatically update same data with "page 2"
 
 Products -> index.vue
-    1. Update Function not working properly
+    1. Update Function not working properly (✓)
+        1.1 combobox not working properly on edit ()
 
 Users -> index.vue
     1. Logged in User should not be visible in the table
@@ -18,3 +19,8 @@ Users -> index.vue
 
 Deliveries -> index.vue
     1. Edit Function
+    2. Status Button 
+        2.1 Radio Button Approach??
+        2.2 if paid button clicked open payment page details
+        2.3 receieved button update to green if ordered product receieved
+    3. Create Viewing Page of Ordered Products

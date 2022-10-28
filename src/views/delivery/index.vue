@@ -15,6 +15,43 @@
           :items="orders.data"
           :options.sync="options"
           :server-items-length="total"
+          class="mt-12"
+        >
+          <template v-slot:[`item.delivery_status`]="{ item }">
+            <v-chip :color="getColor(item.delivery_status)" dark>
+              Received
+            </v-chip>
+          </template>
+          <template v-slot:[`item.payment_status`]="{ item }">
+            <v-chip :color="getColor(item.payment_status)" dark>Paid</v-chip>
+          </template>
+
+          <template v-slot:[`item.dr_number`]="{ item }">
+            <a href="#" @click="viewOrder(item)">
+              {{ item.dr_number }}
+            </a>
+          </template>
+
+          <template v-slot:[`item.created_at`]="{ item }">
+            {{ dateFromNow(item.created_at) }}
+          </template>
+
+          <template v-slot:[`item.actions`]="{ item }">
+            <div class="d-flex justify-end align-center">
+              <Delete :item="item" :name="item.name" :delete="deleteBrand" />
+            </div>
+          </template>
+        </v-data-table>
+      </v-card>
+    </v-container>
+
+    <!-- <v-container>
+      <v-card outlined>
+        <v-data-table
+          :headers="headers"
+          :items="orders.data"
+          :options.sync="options"
+          :server-items-length="total"
           @toggle-select-all="selectAll"
           v-model="selected"
           :show-select="hasUnpublished"
@@ -92,7 +129,7 @@
           </template>
         </v-data-table>
       </v-card>
-    </v-container>
+    </v-container> -->
   </div>
 </template>
 
@@ -111,11 +148,18 @@ export default {
   mixins: [Helper],
 
   data: () => ({
+    amenities: [1, 4],
     publishing: false,
     selected: [],
     options: {},
     headers: [
-      { text: 'Status', value: 'published_at', width: '10%' },
+      {
+        text: 'Status',
+        value: 'delivery_status',
+        width: '1%',
+        sortable: false,
+      },
+      { text: '', value: 'payment_status', sortable: false },
       { text: 'DR Number', value: 'dr_number' },
       { text: 'Supplier', value: 'supplier.name' },
       { text: 'Receiver', value: 'receiver.full_name' },
@@ -145,6 +189,12 @@ export default {
 
     selectAll(e) {
       this.selected = e?.items.filter((item) => item.published_at === null);
+    },
+
+    getColor(delivery_status) {
+      if (delivery_status === 'false') return 'red';
+      else if (delivery_status === '1') return 'green';
+      else return 'red';
     },
 
     async publish() {

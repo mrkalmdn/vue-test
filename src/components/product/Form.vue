@@ -211,6 +211,10 @@ export default {
         brand_id: '',
         category_id: '',
         u_o_m_id: '',
+        price: '',
+        code: '',
+        color: '',
+        size: '',
       },
     };
   },
@@ -235,6 +239,13 @@ export default {
       if (!this.isEmptyObject(this.product)) {
         this.form.id = this.product.id;
         this.form.name = this.product.name;
+        this.form.price = this.product.selling_price;
+        this.form.code = this.product.code;
+        this.form.color = this.product.color;
+        this.form.size = this.product.size;
+        this.form.brand_id = this.product.brand.id;
+        this.form.category_id = this.product.category.id;
+        this.form.u_o_m_id = this.product.uom.id;
       }
     },
 
